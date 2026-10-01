@@ -1,0 +1,101 @@
+{% extends "core/base.html" %}
+
+{% block title %}Dashboard | ChessLab{% endblock %}
+
+{% block extra_head %}
+<style>
+    .hero-title {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .hero-title h1 {
+        font-size: 2.5rem;
+        color: var(--text-white);
+        margin-bottom: 8px;
+    }
+    .hero-title p {
+        font-size: 1.1rem;
+        color: var(--text-light);
+    }
+
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+    }
+
+    .feature-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 24px;
+        text-align: center;
+        transition: transform 0.2s, border-color 0.2s;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent-green);
+    }
+
+    .card-icon {
+        font-size: 3rem;
+        margin-bottom: 12px;
+    }
+
+    .card-title {
+        font-size: 1.4rem;
+        color: var(--text-white);
+        margin: 0 0 8px 0;
+    }
+
+    .card-desc {
+        font-size: 0.95rem;
+        color: #999;
+        margin-bottom: 20px;
+        line-height: 1.4;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-title">
+    <h1>Master Your Chess Vision</h1>
+    <p>Train board recall, play live matches, and guess GM historical moves.</p>
+</div>
+
+<div class="card-grid">
+    <!-- GM Trainer -->
+    <div class="feature-card">
+        <div>
+            <div class="card-icon">🏆</div>
+            <h2 class="card-title">GM Trainer</h2>
+            <p class="card-desc">Step into the shoes of grandmasters in historic matches and test your tactical intuition.</p>
+        </div>
+        <a href="{% url 'gm_trainer' %}" class="btn-primary" style="text-decoration: none; display: block;">Play GM Trainer</a>
+    </div>
+
+    <!-- Flashcards -->
+    <div class="feature-card">
+        <div>
+            <div class="card-icon">🧠</div>
+            <h2 class="card-title">Board-Vision Flashcards</h2>
+            <p class="card-desc">Peek at complex middle-game positions and reconstruct them from memory to build board visualization.</p>
+        </div>
+        <a href="{% url 'flashcards' %}" class="btn-primary" style="text-decoration: none; display: block;">Start Flashcards</a>
+    </div>
+
+    <!-- Multiplayer -->
+    <div class="feature-card">
+        <div>
+            <div class="card-icon">⚔</div>
+            <h2 class="card-title">Multiplayer</h2>
+            <p class="card-desc">Challenge opponents in real-time online matches and test your skills.</p>
+        </div>
+        <a href="{% url 'lobby' %}" class="btn-primary" style="text-decoration: none; display: block;">Play Multiplayer</a>
+    </div>
+</div>
+{% endblock %}

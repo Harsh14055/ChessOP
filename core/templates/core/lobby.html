@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chess Lobby - Join or Create Game</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #262421;
+      color: #bababa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .lobby-card {
+      background-color: #312e2b;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      width: 400px;
+      text-align: center;
+    }
+    h1 { color: #fff; margin-bottom: 20px; font-size: 24px; }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 15px;
+      margin-bottom: 12px;
+      transition: background 0.2s;
+    }
+    .btn-create { background-color: #27ae60; color: #fff; }
+    .btn-create:hover { background-color: #2ecc71; }
+    
+    .join-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .input-code {
+      flex: 1;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #403d39;
+      background-color: #262421;
+      color: #fff;
+      font-size: 14px;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    .btn-join { background-color: #e58e26; color: #fff; width: 100px; margin-bottom: 0; }
+    .btn-join:hover { background-color: #fa983a; }
+    
+    .divider {
+      border-bottom: 1px solid #403d39;
+      margin: 20px 0;
+    }
+
+    .room-list {
+      max-height: 180px;
+      overflow-y: auto;
+      text-align: left;
+    }
+    .room-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #262421;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .room-item span { font-size: 13px; color: #fff; }
+    .btn-small {
+      padding: 6px 12px;
+      background-color: #27ae60;
+      color: #fff;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lobby-card">
+    <h1>⚔️ Chess Multiplayer</h1>
+
+    <!-- Create Room Button -->
+    <button class="btn btn-create" onclick="createGame()">+ Create New Game</button>
+
+    <div class="divider"></div>
+
+    <!-- Direct Code Input -->
+    <div class="join-container">
+      <input type="text" id="roomCodeInput" class="input-code" placeholder="Enter Room Code..." maxlength="8" />
+      <button class="btn btn-join" onclick="joinByCode()">Join</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Open Public Games List -->
+    <h3 style="color: #fff; font-size: 15px; margin-bottom: 10px;">Available Rooms</h3>
+    <div class="room-list">
+      {% if open_games %}
+        {% for game in open_games %}
+          <div class="room-item">
+            <span>Room: <strong>{{ game.room_code }}</strong></span>
+            <a href="/play/{{ game.room_code }}/" class="btn-small">Join Game</a>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p style="font-size: 13px; color: #7f8c8d;">No active open rooms found.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    function createGame() {
+      fetch('/create-room/', {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}',
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.room_code) {
+          window.location.href = `/play/${data.room_code}/`;
+        }
+      });
+    }
+
+    function joinByCode() {
+      const code = document.getElementById('roomCodeInput').value.trim();
+      if (code) {
+        window.location.href = `/play/${code}/`;
+      }
+    }
+  </script>
+</body>
+</html>
